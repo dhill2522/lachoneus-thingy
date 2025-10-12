@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Temple Goals - Gridley 3rd Ward</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css">
+  </head>
+  <body>
+  <section class="section">
+    <div id="app" class="container">
+      <div class="columns is-centered">
+	      <div class="column is-narrow" style="text-align:center">
+      <figure class="image is-align-content-center is-rounded">
+	      <img src="./temple.jpg" style="width:300px;border-radius:5%" alt="Feather River California Temple">
+      </figure>
+      		</div>
+      </div>
+      <div class="columns is-centered" style="text-align:center">
+	      <div class="column is-narrow" style="text-align:center">
+      <h1 class="title">Gridley 3rd Ward Goal Tracker</h1>
+      <p class="subtitle">Temple Ordinance Goals for August 2025</p>
+      		</div>
+      </div>
+      <div class="columns">
+        <div class="column">
+		<p class="subtitle">Goal 1: {{goal1progress}}/250 Endowments</p>
+		<progress class="progress is-primary" v-bind:value="goal1progress" max="250"></progress>
+	</div>
+        <div class="column">
+		<p class="subtitle">Goal 2: {{goal2progress}}/2500 Ordinances</p>
+		<progress class="progress is-primary" v-bind:value="goal2progress" max="2500"></progress>
+	</div>
+      </div>
+    </div>
+  </section>
+  </body>
+</html>
