@@ -3,36 +3,162 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Temple Goals - Gridley 3rd Ward</title>
+    <title>stuffs</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css">
   </head>
+  <script type="importmap">
+    {
+      "imports": {
+        "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.prod.js"
+      }
+    }
+  </script>
+
+  <script type="module">
+    import { createApp } from 'vue'
+
+    createApp({
+      data() {
+        return {
+            secretNumber: Math.floor(Math.random() * 100),
+            numberScale: 100,
+            gameStarted: false,
+            nGuesses: 0,
+            userGuess: "",
+            imACheater: false,
+            hasBeenACheater: false,
+            showGuessHints: true,
+            promptText: "Guess a number! (0-100)",
+            minGoodGuess: 0,
+            maxGoodGuess: 100,
+            hasMadeAGuess: false,
+        }
+      },
+      mounted() {
+        // Generate the new random number
+        this.makeRandomNumber();
+      },
+      methods: {
+        makeRandomNumber() {
+            this.secretNumber = Math.floor(Math.random() * this.numberScale);
+            if (this.showGuessHints) {
+                this.promptText = `Guess a number! (0-${this.numberScale})`;
+            } else {
+                this.promptText = `Guess a number!`;
+            }
+        },
+        startNewGame() {
+            if (this.hasMadeAGuess) {
+                window.alert("Starting a new game...");
+            }
+
+            this.imACheater = false;
+            this.makeRandomNumber();
+            this.makePromptText();
+            this.nGuesses = 0;
+            this.gameStarted = true;
+            this.userGuess = "";
+            this.minGoodGuess = 0;
+            this.maxGoodGuess = this.numberScale;
+            this.hasBeenACheater = false;
+            this.hasMadeAGuess = false;
+        },
+        updateGameLevelEvent(event) {
+            this.numberScale = event.target.value;
+            this.startNewGame();
+        },
+        updateImACheaterEvent(event) {
+            if (event.target.value) {
+                this.hasBeenACheater = true;
+            }
+        },
+        makePromptText(){
+            if (this.showGuessHints) {
+                this.promptText = `Guess a number! (0-${this.numberScale})`;
+            } else {
+                this.promptText = `Guess a number!`;
+            }
+        },
+        updateShowGuessHintsEvent(event) {
+            this.makePromptText();
+        },
+        makeGuess() {
+            this.hasMadeAGuess = true;
+            if (this.userGuess > this.secretNumber) {
+                window.alert("to high, try again");
+                console.log(this.userGuess, this.maxGoodGuess, this.userGuess < this.maxGoodGuess)
+                if (this.userGuess < this.maxGoodGuess) {
+                    this.maxGoodGuess = this.userGuess - 1;
+                }
+            } else if (this.userGuess < this.secretNumber) {
+                window.alert("to low, try again");
+                if (this.userGuess > this.minGoodGuess) {
+                    this.minGoodGuess = this.userGuess + 1;
+                }
+            } else {
+                if (this.hasBeenACheater) {
+                    window.alert("correct, but also you peeked!");
+                }
+                else {
+                    window.alert("correct yaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+                } 
+                this.startNewGame();
+                // if (nGuesses > numberOfGoodGuesses) {
+                //     if (userChoice === 4) {
+                //         window.alert(`it took you more then ${numberOfGoodGuesses} guesses for 0-10000000000 🧐`);
+                //     } else if (userChoice === 10) {
+                //         window.alert(`it took you more then ${numberOfGoodGuesses} guesses for the google (10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000)😱 you discrase`);
+                //     }
+                //     window.alert(`It took you ${numberOfGuesses} guesses. Embarrasing.... 😃`);
+                // } else {
+                //     window.alert(`you did great it only took you ${numberOfGuesses} guesses 🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳`);
+                // }
+            }
+            this.userGuess = "";
+            this.makePromptText();
+        }
+      }
+    }).mount('#app')
+  </script>
+
   <body>
-  <section class="section">
-    <div id="app" class="container">
-      <div class="columns is-centered">
-	      <div class="column is-narrow" style="text-align:center">
-      <figure class="image is-align-content-center is-rounded">
-	      <img src="./temple.jpg" style="width:300px;border-radius:5%" alt="Feather River California Temple">
-      </figure>
-      		</div>
-      </div>
-      <div class="columns is-centered" style="text-align:center">
-	      <div class="column is-narrow" style="text-align:center">
-      <h1 class="title">Gridley 3rd Ward Goal Tracker</h1>
-      <p class="subtitle">Temple Ordinance Goals for August 2025</p>
-      		</div>
-      </div>
-      <div class="columns">
-        <div class="column">
-		<p class="subtitle">Goal 1: {{goal1progress}}/250 Endowments</p>
-		<progress class="progress is-primary" v-bind:value="goal1progress" max="250"></progress>
-	</div>
-        <div class="column">
-		<p class="subtitle">Goal 2: {{goal2progress}}/2500 Ordinances</p>
-		<progress class="progress is-primary" v-bind:value="goal2progress" max="2500"></progress>
-	</div>
-      </div>
+
+    <div id="app" class="container">  
+        <section class="section">
+        <h1 class="title">Our Guessing Game</h1>
+        <div class="radios">
+        <label class="radio">
+            <input type="radio" @change="updateGameLevelEvent($event)" v-model="numberScale" value=100 name="rsvp" enabled=""/>
+            Easy (0-100)
+        </label>
+        <label class="radio">
+            <input type="radio" @change="updateGameLevelEvent($event)" v-model="numberScale" value=1000 name="rsvp" />
+            Medium (0-1000)
+        </label>
+        <label class="radio" disabled>
+            <input type="radio" @change="updateGameLevelEvent($event)" v-model="numberScale" value=10000 name="rsvp"/>
+            Hard (0-10000)
+        </label>
+        <label class="radio" disabled>
+            <input type="radio" @change="updateGameLevelEvent($event)" v-model="numberScale" value=1e10 name="rsvp"/>
+            Don't you have better things to do? (A really BIIIIIG number)
+        </label>
+        </div>
+        <label class="checkbox">
+            <input type="checkbox" v-model="imACheater" @change="updateImACheaterEvent($event)"/>
+            I'm a cheater
+        </label>
+        <!-- <label class="checkbox" style="margin-left: 15px;">
+            <input type="checkbox" v-model="showGuessHints" @change="updateShowGuessHintsEvent($event)"/>
+            Show guess hints
+        </label> -->
+        <input class="input" type="text" v-bind:placeholder="promptText" 
+                v-on:keyup.enter="makeGuess"
+                v-model="userGuess"/>
+        
+        <h2 class="subtitle" v-bind:hidden="!imACheater">The secret number is: {{secretNumber}}!</h2>
+        <!-- <h2 class="subtitle">min/max: {{minGoodGuess}}/{{maxGoodGuess}}</h2> -->
+      </section>
     </div>
-  </section>
   </body>
 </html>
